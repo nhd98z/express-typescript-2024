@@ -1,8 +1,9 @@
 import type { ErrorRequestHandler, RequestHandler } from "express";
-import { StatusCodes } from "http-status-codes";
+
+import { NOT_FOUND } from "../code";
 
 const unexpectedRequest: RequestHandler = (_req, res) => {
-  res.sendStatus(StatusCodes.NOT_FOUND);
+  res.sendStatus(NOT_FOUND);
 };
 
 const addErrorToRequestLog: ErrorRequestHandler = (err, _req, res, next) => {

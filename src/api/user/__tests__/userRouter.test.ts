@@ -1,9 +1,9 @@
-import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 
 import type { User } from "@/api/user/userModel";
 import { users } from "@/api/user/userRepository";
-import type { ServiceResponse } from "@/common/models/serviceResponse";
+import { BAD_REQUEST, NOT_FOUND, OK } from "@/common/code";
+import type { Respo } from "@/common/models/respo";
 import { app } from "@/server";
 
 describe("User API Endpoints", () => {
@@ -11,14 +11,14 @@ describe("User API Endpoints", () => {
     it("should return a list of users", async () => {
       // Act
       const response = await request(app).get("/users");
-      const responseBody: ServiceResponse<User[]> = response.body;
+      const responseBody: Respo<User[]> = response.body;
 
       // Assert
-      expect(response.statusCode).toEqual(StatusCodes.OK);
+      expect(response.statusCode).toEqual(OK);
       expect(responseBody.success).toBeTruthy();
       expect(responseBody.message).toContain("Users found");
-      expect(responseBody.responseObject.length).toEqual(users.length);
-      responseBody.responseObject.forEach((user, index) => compareUsers(users[index] as User, user));
+      expect(responseBody.data.length).toEqual(users.length);
+      responseBody.data.forEach((user, index) => compareUsers(users[index] as User, user));
     });
   });
 
@@ -30,14 +30,14 @@ describe("User API Endpoints", () => {
 
       // Act
       const response = await request(app).get(`/users/${testId}`);
-      const responseBody: ServiceResponse<User> = response.body;
+      const responseBody: Respo<User> = response.body;
 
       // Assert
-      expect(response.statusCode).toEqual(StatusCodes.OK);
+      expect(response.statusCode).toEqual(OK);
       expect(responseBody.success).toBeTruthy();
       expect(responseBody.message).toContain("User found");
       if (!expectedUser) throw new Error("Invalid test data: expectedUser is undefined");
-      compareUsers(expectedUser, responseBody.responseObject);
+      compareUsers(expectedUser, responseBody.data);
     });
 
     it("should return a not found error for non-existent ID", async () => {
@@ -46,26 +46,26 @@ describe("User API Endpoints", () => {
 
       // Act
       const response = await request(app).get(`/users/${testId}`);
-      const responseBody: ServiceResponse = response.body;
+      const responseBody: Respo = response.body;
 
       // Assert
-      expect(response.statusCode).toEqual(StatusCodes.NOT_FOUND);
+      expect(response.statusCode).toEqual(NOT_FOUND);
       expect(responseBody.success).toBeFalsy();
       expect(responseBody.message).toContain("User not found");
-      expect(responseBody.responseObject).toBeNull();
+      expect(responseBody.data).toBeNull();
     });
 
     it("should return a bad request for invalid ID format", async () => {
       // Act
       const invalidInput = "abc";
       const response = await request(app).get(`/users/${invalidInput}`);
-      const responseBody: ServiceResponse = response.body;
+      const responseBody: Respo = response.body;
 
       // Assert
-      expect(response.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+      expect(response.statusCode).toEqual(BAD_REQUEST);
       expect(responseBody.success).toBeFalsy();
       expect(responseBody.message).toContain("Invalid input");
-      expect(responseBody.responseObject).toBeNull();
+      expect(responseBody.data).toBeNull();
     });
   });
 });

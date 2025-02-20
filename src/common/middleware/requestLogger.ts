@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import type { Request, RequestHandler, Response } from "express";
-import { StatusCodes, getReasonPhrase } from "http-status-codes";
+import { getReasonPhrase } from "http-status-codes";
 import type { LevelWithSilent } from "pino";
 import { type CustomAttributeKeys, type Options, pinoHttp } from "pino-http";
 
 import { env } from "@/common/utils/envConfig";
+import { BAD_REQUEST, ISE, MULTIPLE_CHOICES, NOT_FOUND } from "../code";
 
 enum LogLevel {
   Fatal = "fatal",
@@ -68,14 +69,14 @@ const responseBodyMiddleware: RequestHandler = (_req, res, next) => {
 };
 
 const customLogLevel = (_req: IncomingMessage, res: ServerResponse<IncomingMessage>, err?: Error): LevelWithSilent => {
-  if (err || res.statusCode >= StatusCodes.INTERNAL_SERVER_ERROR) return LogLevel.Error;
-  if (res.statusCode >= StatusCodes.BAD_REQUEST) return LogLevel.Warn;
-  if (res.statusCode >= StatusCodes.MULTIPLE_CHOICES) return LogLevel.Silent;
+  if (err || res.statusCode >= ISE) return LogLevel.Error;
+  if (res.statusCode >= BAD_REQUEST) return LogLevel.Warn;
+  if (res.statusCode >= MULTIPLE_CHOICES) return LogLevel.Silent;
   return LogLevel.Info;
 };
 
 const customSuccessMessage = (req: IncomingMessage, res: ServerResponse<IncomingMessage>) => {
-  if (res.statusCode === StatusCodes.NOT_FOUND) return getReasonPhrase(StatusCodes.NOT_FOUND);
+  if (res.statusCode === NOT_FOUND) return getReasonPhrase(NOT_FOUND);
   return `${req.method} completed`;
 };
 

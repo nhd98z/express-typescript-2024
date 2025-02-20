@@ -28,3 +28,5 @@ export class UserRepository {
     return users.find((user) => user.id === id) || null;
   }
 }
+
+export const userRepository = new UserRepository();
