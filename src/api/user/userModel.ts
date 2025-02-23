@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { commonValidations } from "@/common/utils/commonValidation";
+import { commonValidations } from "@/common/util/commonValidation";
 
 export const zUser = z.object({
   id: z.number(),

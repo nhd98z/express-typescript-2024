@@ -1,7 +1,7 @@
 import request from "supertest";
 
 import { OK } from "@/common/code";
-import type { Respo } from "@/common/models/respo";
+import type { Respo } from "@/common/model/respo";
 import { app } from "@/server";
 
 describe("Health Check API endpoints", () => {

@@ -1,8 +1,8 @@
 import express, { type Request, type RequestHandler, type Response, type Router } from "express";
 
 import { ISE, NOT_FOUND, OK } from "@/common/code";
-import { Respo } from "@/common/models/respo";
-import { validateRequest } from "@/common/utils/httpHandlers";
+import { Respo } from "@/common/model/respo";
+import { validateRequest } from "@/common/util/httpHandlers";
 import { logger } from "@/server";
 import { zGetUser } from "./userModel";
 import { UserRepository } from "./userRepository";

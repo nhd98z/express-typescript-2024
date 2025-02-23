@@ -1,7 +1,7 @@
 import express, { type Request, type Response, type Router } from "express";
 
 import { OK } from "@/common/code";
-import { Respo } from "@/common/models/respo";
+import { Respo } from "@/common/model/respo";
 
 export const healthRouter: Router = express.Router();
 

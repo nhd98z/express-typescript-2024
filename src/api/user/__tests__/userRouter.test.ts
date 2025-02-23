@@ -3,7 +3,7 @@ import request from "supertest";
 import type { User } from "@/api/user/userModel";
 import { users } from "@/api/user/userRepository";
 import { BAD_REQUEST, NOT_FOUND, OK } from "@/common/code";
-import type { Respo } from "@/common/models/respo";
+import type { Respo } from "@/common/model/respo";
 import { app } from "@/server";
 
 describe("User API Endpoints", () => {
